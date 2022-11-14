@@ -1,7 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { z } from 'zod';
-import DiscordGuild from '../database/model/DiscordGuild';
-
+import { createGuild, getGuildById } from '../database/services/DiscordGuildServices';
 import CommandInterface from './types/CommandInterface';
 
 const registerGuild: CommandInterface = {
@@ -11,37 +9,37 @@ const registerGuild: CommandInterface = {
     .addChannelOption((option) =>
       option
         .setName('pupper-channel')
-        .setDescription(
-          'The channel where the bot will periodically post a rare pupper.',
-        )
+        .setDescription('The channel where the bot will periodically post a rare pupper.')
         .setRequired(true),
     ),
 
   async execute(interaction) {
-    const pupperChannel = interaction.options
-      .get('pupper-channel')!
-      .value!.toString();
+    try {
+      if (await getGuildById(interaction.guildId!)) {
+        await interaction.reply('Your guild is already registered.');
+        return;
+      }
 
-    // remove all non numeric characters from pupperChannel
+      const pupperChannel = interaction.options.get('pupper-channel')!.value!.toString();
 
-    const channel = pupperChannel.replace(/\D/g, '');
+      const channel = pupperChannel.replace(/\D/g, '');
+      const guild = await createGuild({
+        guildId: interaction.guildId!,
+        pupperChannelId: channel,
+        name: interaction.guild!.name,
+      });
 
-    const guild = new DiscordGuild();
-    guild.name = interaction.guild!.name;
-    guild.guildId = interaction.guildId!;
-    guild.pupperChannelId = channel;
-    guild.createdAt = new Date();
+      const embed = new EmbedBuilder().setTitle('Guild Registered!').addFields([
+        { name: 'Guild Name', value: guild.name },
+        { name: 'Pupper Channel', value: `<#${guild.pupperChannelId}>` },
+      ]);
 
-    await guild.save();
-
-    // create an embed with the guild information
-
-    const embed = new EmbedBuilder().setTitle('Guild Registered!').addFields([
-      { name: 'Guild Name', value: guild.name },
-      { name: 'Pupper Channel', value: `<#${guild.pupperChannelId}>` },
-    ]);
-
-    await interaction.reply({ embeds: [embed] });
+      await interaction.reply({ embeds: [embed] });
+    } catch (error) {
+      await interaction.reply(
+        'Something went wrong while registering your guild. Please try again later.',
+      );
+    }
   },
 };
 

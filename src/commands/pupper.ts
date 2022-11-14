@@ -3,9 +3,7 @@ import redditResponseSchema from '../schema/redditResponseSchema';
 import CommandInterface from './types/CommandInterface';
 
 const getRarePuppersPosts = async () => {
-  const response = await fetch(
-    'https://www.reddit.com/r/rarepuppers.json?limit=100',
-  );
+  const response = await fetch('https://www.reddit.com/r/rarepuppers.json?limit=100');
   const data = await response.json();
 
   const posts = redditResponseSchema.parse(data).data.children;
@@ -13,8 +11,7 @@ const getRarePuppersPosts = async () => {
   const filteredAndSortedPosts = posts
     .filter((post) => {
       const postIsVideo = post.data.is_video;
-      const postIsHostedOnReddit =
-        post.data.url.startsWith('https://i.redd.it/');
+      const postIsHostedOnReddit = post.data.url.startsWith('https://i.redd.it/');
 
       return !postIsVideo && postIsHostedOnReddit;
     })
@@ -22,25 +19,23 @@ const getRarePuppersPosts = async () => {
 
   return filteredAndSortedPosts;
 };
+
 const pupper: CommandInterface = {
-  data: new SlashCommandBuilder()
-    .setName('pupper')
-    .setDescription('Replies with a random pupper!'),
+  data: new SlashCommandBuilder().setName('pupper').setDescription('Replies with a random pupper!'),
   async execute(interaction) {
-    const posts = await getRarePuppersPosts();
+    try {
+      const posts = await getRarePuppersPosts();
+      const randomPost = posts[Math.floor(Math.random() * posts.length)];
+      const embed = new EmbedBuilder()
+        .setTitle(randomPost.title)
+        .setURL(`https://reddit.com${randomPost.permalink}`)
+        .setImage(randomPost.url)
+        .setFooter({ text: `Posted by u/${randomPost.author}` });
 
-    // get random post
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
-
-    // create a new embed with the post data
-
-    const embed = new EmbedBuilder()
-      .setTitle(randomPost.title)
-      .setURL(`https://reddit.com${randomPost.permalink}`)
-      .setImage(randomPost.url)
-      .setFooter({ text: `Posted by u/${randomPost.author}` });
-
-    await interaction.reply({ embeds: [embed] });
+      await interaction.reply({ embeds: [embed] });
+    } catch (error) {
+      await interaction.reply('Something went wrong. Please try again later.');
+    }
   },
 };
 

@@ -1,0 +1,29 @@
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { getGuildById } from '../database/services/DiscordGuildServices';
+import CommandInterface from './types/CommandInterface';
+
+const getInfo: CommandInterface = {
+  data: new SlashCommandBuilder()
+    .setName('getinfo')
+    .setDescription('Gets the info stored in the database for this server.'),
+
+  async execute(interaction) {
+    const guild = await getGuildById(interaction.guildId!);
+
+    if (!guild) {
+      await interaction.reply(
+        'Your guild is not registered. Please use the /registerguild command to register your guild.',
+      );
+      return;
+    }
+
+    const embed = new EmbedBuilder().setTitle('Guild Info').addFields([
+      { name: 'Guild Name', value: guild.name },
+      { name: 'Pupper Channel', value: `<#${guild.pupperChannelId}>` },
+    ]);
+
+    await interaction.reply({ embeds: [embed] });
+  },
+};
+
+export default getInfo;
