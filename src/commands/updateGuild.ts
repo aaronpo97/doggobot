@@ -11,25 +11,25 @@ const updateGuild: CommandInterface = {
         .setName('pupper-channel')
         .setDescription('The channel where the bot will periodically post a rare pupper.')
         .setRequired(true),
-    ),
+    )
+    .setDefaultMemberPermissions(0),
 
   async execute(interaction) {
     try {
-      if (!(await getGuildById(interaction.guildId!))) {
+      const guild = await getGuildById(interaction.guildId!);
+      if (!guild) {
         await interaction.reply("You haven't registered your server yet!");
         return;
       }
 
       const pupperChannel = interaction.options.get('pupper-channel')!.value!.toString();
+      const channelId = pupperChannel.replace(/\D/g, '');
 
-      const channel = pupperChannel.replace(/\D/g, '');
-
-      await updateGuildById({ guildId: interaction.guildId!, pupperChannelId: channel });
-
+      await updateGuildById({ guildId: interaction.guildId!, pupperChannelId: channelId });
       await interaction.reply('Pupper channel updated!');
     } catch (error) {
       await interaction.reply(
-        'Something went wrong while registering your guild. Please try again later.',
+        'Something went wrong while updating your guild. Please try again later.',
       );
     }
   },

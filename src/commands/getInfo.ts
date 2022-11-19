@@ -5,7 +5,8 @@ import CommandInterface from './types/CommandInterface';
 const getInfo: CommandInterface = {
   data: new SlashCommandBuilder()
     .setName('getinfo')
-    .setDescription('Gets the info stored in the database for this server.'),
+    .setDescription('Gets the info stored in the database for this server.')
+    .setDefaultMemberPermissions(0),
 
   async execute(interaction) {
     const guild = await getGuildById(interaction.guildId!);

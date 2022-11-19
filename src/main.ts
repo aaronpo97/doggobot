@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import 'reflect-metadata';
 import { Events } from 'discord.js';
+import cron from 'node-cron';
 import client from './config/discord/client';
-
 import registerCommands from './config/discord/deployCommands';
 import ping from './commands/ping';
 import pupper from './commands/pupper';
@@ -11,15 +11,22 @@ import AppDataSource from './database/AppDataSource';
 import getInfo from './commands/getInfo';
 import unregisterGuild from './commands/unregisterGuild';
 import updateGuild from './commands/updateGuild';
+import sendPuppers from './scheduled-jobs/sendPuppers';
+import logger from './config/logger';
+import help from './commands/help';
 
 const token = process.env.DISCORD_TOKEN;
 
 // create a new Discord discordBotClient
 
-client.once(Events.ClientReady, async () => {
+client.once(Events.ClientReady, async (readyClient) => {
   await registerCommands();
-  console.log(`Logged in as ${client.user!.tag}`);
+  logger.info(`Logged in as ${client.user!.tag}`);
   await AppDataSource.initialize();
+
+  cron.schedule('0 */1 * * *', async () => {
+    await sendPuppers(readyClient);
+  });
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -42,6 +49,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
       break;
     case 'updateguild':
       await updateGuild.execute(interaction);
+      break;
+    case 'help':
+      await help.execute(interaction);
       break;
     default:
       break;
