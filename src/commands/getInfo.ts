@@ -1,5 +1,7 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { CacheType, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import logger from '../config/logger';
 import { getGuildById } from '../database/services/DiscordGuildServices';
+import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
 
 const getInfo: CommandInterface = {
@@ -8,7 +10,7 @@ const getInfo: CommandInterface = {
     .setDescription('Gets the info stored in the database for this server.')
     .setDefaultMemberPermissions(0),
 
-  async execute(interaction) {
+  execute: commandWrapper(async (interaction) => {
     const guild = await getGuildById(interaction.guildId!);
 
     if (!guild) {
@@ -24,7 +26,7 @@ const getInfo: CommandInterface = {
     ]);
 
     await interaction.reply({ embeds: [embed] });
-  },
+  }),
 };
 
 export default getInfo;
