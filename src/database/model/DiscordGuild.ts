@@ -1,5 +1,4 @@
-// create a typeorm model for the discord guild
-
+// eslint-disable-next-line no-unused-vars
 import { PrimaryGeneratedColumn, Column, BaseEntity, Entity } from 'typeorm';
 
 @Entity()

@@ -7,8 +7,6 @@ const help: CommandInterface = {
     .setName('help')
     .setDescription('Replies with a list of commands!'),
 
-  // execute: async (interaction) => {
-
   execute: commandWrapper(async (interaction) => {
     const embed = new EmbedBuilder()
       .setTitle('Help')

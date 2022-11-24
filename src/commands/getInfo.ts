@@ -1,5 +1,4 @@
-import { CacheType, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import logger from '../config/logger';
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { getGuildById } from '../database/services/DiscordGuildServices';
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';

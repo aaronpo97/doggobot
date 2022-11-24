@@ -1,5 +1,5 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { createGuild, deleteGuild, getGuildById } from '../database/services/DiscordGuildServices';
+import { SlashCommandBuilder } from 'discord.js';
+import { deleteGuild, getGuildById } from '../database/services/DiscordGuildServices';
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
 

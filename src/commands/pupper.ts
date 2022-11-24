@@ -1,7 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import logger from '../config/logger';
 import getRandomPost from '../scheduled-jobs/getRandomPost';
-import redditResponseSchema from '../schema/redditResponseSchema';
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
 

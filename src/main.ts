@@ -17,8 +17,6 @@ import help from './commands/help';
 
 const token = process.env.DISCORD_TOKEN;
 
-// create a new Discord discordBotClient
-
 client.once(Events.ClientReady, async (readyClient) => {
   await registerCommands();
   logger.info(`Logged in as ${client.user!.tag}`);
