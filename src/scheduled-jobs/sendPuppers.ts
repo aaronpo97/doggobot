@@ -5,9 +5,9 @@ import getRandomPost from './getRandomPost';
 
 const sendPuppers = async (readyClient: Client<true>) => {
   const guilds = await getAllGuilds();
-  const randomPost = await getRandomPost();
 
   guilds.forEach(async (guild) => {
+    const randomPost = await getRandomPost();
     const { pupperChannelId } = guild;
     const channel = (await readyClient.channels.fetch(pupperChannelId)) as TextChannel | null;
 

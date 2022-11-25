@@ -22,7 +22,7 @@ client.once(Events.ClientReady, async (readyClient) => {
   logger.info(`Logged in as ${client.user!.tag}`);
   await AppDataSource.initialize();
 
-  cron.schedule('0 */1 * * *', async () => {
+  cron.schedule('0 */3 * * *', async () => {
     await sendPuppers(readyClient);
   });
 });
