@@ -1,28 +1,24 @@
-import redditResponseSchema from '../schema/redditResponseSchema';
-
-const getRarePuppersPosts = async () => {
-  const response = await fetch('https://www.reddit.com/r/rarepuppers.json?limit=100');
-  const data = await response.json();
-
-  const posts = redditResponseSchema.parse(data).data.children;
-
-  const filteredAndSortedPosts = posts
-    .filter((post) => {
-      const postIsVideo = post.data.is_video;
-      const postIsHostedOnReddit = post.data.url.startsWith('https://i.redd.it/');
-
-      return !postIsVideo && postIsHostedOnReddit;
-    })
-    .map((post) => post.data);
-
-  return filteredAndSortedPosts;
-};
+import { z } from 'zod';
+import redisClient from '../config/redis/redisClient';
+import pupperPostSchema from '../schema/pupperPostSchema';
 
 const getRandomPost = async () => {
-  const posts = await getRarePuppersPosts();
-  const randomPost = posts[Math.floor(Math.random() * posts.length)];
+  const posts = await redisClient.json.get('puppers');
 
-  return randomPost;
+  if (!posts) {
+    return null;
+  }
+
+  const puppers = z.array(pupperPostSchema).parse(posts);
+  const randomPupper = puppers[Math.floor(Math.random() * puppers.length)];
+
+  await redisClient.json.set(
+    'puppers',
+    '.',
+    puppers.filter((post) => post.title !== randomPupper.title),
+  );
+
+  return randomPupper;
 };
 
 export default getRandomPost;
