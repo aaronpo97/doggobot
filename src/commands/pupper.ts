@@ -7,6 +7,12 @@ const pupper: CommandInterface = {
   data: new SlashCommandBuilder().setName('pupper').setDescription('Replies with a random pupper!'),
   execute: commandWrapper(async (interaction) => {
     const randomPost = await getRandomPost();
+
+    if (!randomPost) {
+      await interaction.reply('No more puppers to send 🥺');
+      return;
+    }
+
     const embed = new EmbedBuilder()
       .setTitle(randomPost.title)
       .setURL(`https://reddit.com${randomPost.permalink}`)

@@ -3,19 +3,36 @@ import cron from 'node-cron';
 
 import registerCommands from '../config/discord/deployCommands';
 import logger from '../config/logger';
+import redisClient from '../config/redis/redisClient';
 import AppDataSource from '../database/AppDataSource';
+import getRarePuppersPosts from '../scheduled-jobs/getRarePuppersPosts';
 import sendPuppers from '../scheduled-jobs/sendPuppers';
 
 const clientReady = async (client: Client<true>) => {
-  await AppDataSource.initialize();
-  await registerCommands();
-  client.user!.setActivity('/help', { type: ActivityType.Listening });
+  const setPupperCache = async () => {
+    const puppers = await getRarePuppersPosts();
+    await redisClient.json.set('puppers', '.', puppers);
+  };
 
-  logger.info(`Logged in as ${client.user!.tag}`);
+  try {
+    const clientStartupTasks: Promise<unknown>[] = [
+      AppDataSource.initialize(),
+      registerCommands(),
+      redisClient.connect(),
+      setPupperCache(),
+    ];
 
-  cron.schedule('0 */3 * * *', async () => {
-    await sendPuppers(client);
-  });
+    await Promise.all(clientStartupTasks);
+    client.user!.setActivity('/help', { type: ActivityType.Listening });
+    logger.info(`Logged in as ${client.user!.tag}`);
+
+    cron.schedule('0 0 * * *', setPupperCache);
+    cron.schedule('0 */3 * * *', async () => {
+      await sendPuppers(client);
+    });
+  } catch (error) {
+    logger.error(error);
+  }
 };
 
 export default clientReady;

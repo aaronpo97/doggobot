@@ -15,6 +15,11 @@ const sendPuppers = async (readyClient: Client<true>) => {
       return;
     }
 
+    if (!randomPost) {
+      await channel.send('No more puppers to send 🥺');
+      return;
+    }
+
     const embed = new EmbedBuilder()
       .setTitle(randomPost.title)
       .setURL(`https://reddit.com${randomPost.permalink}`)
