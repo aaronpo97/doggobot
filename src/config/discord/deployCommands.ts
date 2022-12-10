@@ -5,6 +5,7 @@ import 'dotenv/config';
 import getInfo from '../../commands/getInfo';
 import help from '../../commands/help';
 import ping from '../../commands/ping';
+import test from '../../commands/test';
 import pupper from '../../commands/pupper';
 import registerGuild from '../../commands/registerGuild';
 import unregisterGuild from '../../commands/unregisterGuild';
@@ -21,6 +22,7 @@ const commands = [
   unregisterGuild.data,
   updateGuild.data,
   help.data,
+  test.data,
 ].map((command) => command.toJSON!());
 
 const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN!);

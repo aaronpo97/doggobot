@@ -3,6 +3,7 @@ import getInfo from '../commands/getInfo';
 import help from '../commands/help';
 import ping from '../commands/ping';
 import pupper from '../commands/pupper';
+import test from '../commands/test';
 import registerGuild from '../commands/registerGuild';
 import unregisterGuild from '../commands/unregisterGuild';
 import updateGuild from '../commands/updateGuild';
@@ -30,6 +31,9 @@ const interactionCreate = async (interaction: Interaction<CacheType>) => {
       break;
     case 'help':
       await help.execute(interaction);
+      break;
+    case 'test':
+      await test.execute(interaction);
       break;
     default:
       break;
