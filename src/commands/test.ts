@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, TextChannel } from 'discord.js';
+import sendPupperToChannel from '../api/sendPostToChannel';
 import { getGuildById } from '../database/services/DiscordGuildServices';
-import { sendPupperToChannel } from '../scheduled-jobs/sendPuppers';
+
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
 

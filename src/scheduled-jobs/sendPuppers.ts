@@ -1,22 +1,7 @@
-import { Client, TextChannel, EmbedBuilder } from 'discord.js';
+import { Client, TextChannel } from 'discord.js';
+import sendPupperToChannel from '../api/sendPostToChannel';
 
 import { getAllGuilds } from '../database/services/DiscordGuildServices';
-import getRandomPost from './getRandomPost';
-
-export const sendPupperToChannel = async (channel: TextChannel) => {
-  const randomPost = await getRandomPost();
-  if (!randomPost) {
-    await channel.send('No more puppers to send 🥺');
-    return;
-  }
-  const embed = new EmbedBuilder()
-    .setTitle(randomPost.title)
-    .setURL(`https://reddit.com${randomPost.permalink}`)
-    .setImage(randomPost.url)
-    .setFooter({ text: `Posted by u/${randomPost.author}` });
-
-  await channel.send({ embeds: [embed] });
-};
 
 const sendPuppers = async (readyClient: Client<true>) => {
   const guilds = await getAllGuilds();

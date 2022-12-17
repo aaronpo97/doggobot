@@ -5,7 +5,7 @@ import registerCommands from '../config/discord/deployCommands';
 import logger from '../config/logger';
 import redisClient from '../config/redis/redisClient';
 import AppDataSource from '../database/AppDataSource';
-import getRarePuppersPosts from '../scheduled-jobs/getRarePuppersPosts';
+import getRarePuppersPosts from '../api/getRarePuppersPosts';
 import sendPuppers from '../scheduled-jobs/sendPuppers';
 
 const clientReady = async (client: Client<true>) => {

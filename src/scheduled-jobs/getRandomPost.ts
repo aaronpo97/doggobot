@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import redisClient from '../config/redis/redisClient';
-import pupperPostSchema from '../schema/pupperPostSchema';
+import pupperPostSchema from '../util/zod/pupperPostSchema';
 
 const getRandomPost = async () => {
   const posts = await redisClient.json.get('puppers');

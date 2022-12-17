@@ -1,7 +1,7 @@
-import redditResponseSchema from '../schema/redditResponseSchema';
+import redditResponseSchema from '../util/zod/redditResponseSchema';
 
 const getRarePuppersPosts = async () => {
-  const response = await fetch('https://www.reddit.com/r/rarepuppers.json?limit=100');
+  const response = await fetch('https://www.reddit.com/r/rarepuppers.json?limit=250');
   const data = await response.json();
   const posts = redditResponseSchema.parse(data).data.children;
 
