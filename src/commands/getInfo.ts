@@ -1,7 +1,9 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { getGuildById } from '../database/services/DiscordGuildServices';
+
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
+import GuildService from '../services/GuildService';
+import prisma from '../database/client';
 
 const getInfo: CommandInterface = {
   data: new SlashCommandBuilder()
@@ -10,7 +12,8 @@ const getInfo: CommandInterface = {
     .setDefaultMemberPermissions(0),
 
   execute: commandWrapper(async (interaction) => {
-    const guild = await getGuildById(interaction.guildId!);
+    const service = new GuildService(prisma);
+    const guild = await service.getGuildById(interaction.guildId!);
 
     if (!guild) {
       await interaction.reply(

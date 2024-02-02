@@ -8,10 +8,10 @@ const sendPupperToChannel = async (channel: TextChannel) => {
     return;
   }
   const embed = new EmbedBuilder()
-    .setTitle(randomPost.title)
-    .setURL(`https://reddit.com${randomPost.permalink}`)
-    .setImage(randomPost.url)
-    .setFooter({ text: `Posted by u/${randomPost.author}` });
+    .setTitle("Here's a pupper for you!")
+    .setURL(randomPost.message)
+    .setImage(randomPost.message)
+    .setFooter({ text: `From https://dog.ceo/dog-api/` });
 
   await channel.send({ embeds: [embed] });
 };

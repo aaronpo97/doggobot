@@ -1,24 +1,15 @@
-import { z } from 'zod';
-import redisClient from '../config/redis/redisClient';
-import pupperPostSchema from '../util/zod/pupperPostSchema';
+import PostSchema from '../util/zod/PostSchema';
 
 const getRandomPost = async () => {
-  const posts = await redisClient.json.get('puppers');
+  const response = await fetch('https://dog.ceo/api/breeds/image/random');
+  const data = await response.json();
+  const parsed = PostSchema.safeParse(data);
 
-  if (!posts) {
-    return null;
+  if (!parsed.success) {
+    throw new Error('Failed to parse response from API');
   }
 
-  const puppers = z.array(pupperPostSchema).parse(posts);
-  const randomPupper = puppers[Math.floor(Math.random() * puppers.length)];
-
-  await redisClient.json.set(
-    'puppers',
-    '.',
-    puppers.filter((post) => post.title !== randomPupper.title),
-  );
-
-  return randomPupper;
+  return parsed.data;
 };
 
 export default getRandomPost;

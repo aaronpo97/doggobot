@@ -1,7 +1,8 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { createGuild, getGuildById } from '../database/services/DiscordGuildServices';
+import GuildService from '../services/GuildService';
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
+import prisma from '../database/client';
 
 const registerGuild: CommandInterface = {
   data: new SlashCommandBuilder()
@@ -15,7 +16,8 @@ const registerGuild: CommandInterface = {
     )
     .setDefaultMemberPermissions(0),
   execute: commandWrapper(async (interaction) => {
-    const guild = await getGuildById(interaction.guildId!);
+    const service = new GuildService(prisma);
+    const guild = await service.getGuildById(interaction.guildId!);
     if (guild) {
       await interaction.reply('Your guild is already registered!');
       return;
@@ -24,7 +26,7 @@ const registerGuild: CommandInterface = {
     const pupperChannel = interaction.options.get('pupper-channel')!.value!.toString();
     const channel = pupperChannel.replace(/\D/g, '');
 
-    const newGuild = await createGuild({
+    const newGuild = await service.createGuild({
       guildId: interaction.guildId!,
       pupperChannelId: channel,
       name: interaction.guild!.name,

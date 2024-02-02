@@ -1,9 +1,10 @@
 import { SlashCommandBuilder, TextChannel } from 'discord.js';
 import sendPupperToChannel from '../api/sendPostToChannel';
-import { getGuildById } from '../database/services/DiscordGuildServices';
+import GuildService from '../services/GuildService';
 
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
+import prisma from '../database/client';
 
 const test: CommandInterface = {
   data: new SlashCommandBuilder()
@@ -12,7 +13,8 @@ const test: CommandInterface = {
     .setDefaultMemberPermissions(0),
 
   execute: commandWrapper(async (interaction) => {
-    const guild = await getGuildById(interaction.guildId!);
+    const service = new GuildService(prisma);
+    const guild = await service.getGuildById(interaction.guildId!);
 
     if (!guild) {
       await interaction.reply('Your guild is not registered!');

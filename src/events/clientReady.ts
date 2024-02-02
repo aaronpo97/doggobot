@@ -3,24 +3,14 @@ import cron from 'node-cron';
 
 import registerCommands from '../config/discord/deployCommands';
 import logger from '../config/logger';
-import redisClient from '../config/redis/redisClient';
-import AppDataSource from '../database/AppDataSource';
-import getRarePuppersPosts from '../api/getRarePuppersPosts';
+
 import sendPuppers from '../scheduled-jobs/sendPuppers';
 
 const clientReady = async (client: Client<true>) => {
-  const setPupperCache = async () => {
-    const puppers = await getRarePuppersPosts();
-    await redisClient.json.set('puppers', '.', puppers);
-  };
+  const setPupperCache = async () => {};
 
   try {
-    const clientStartupTasks: Promise<unknown>[] = [
-      AppDataSource.initialize(),
-      registerCommands(),
-      redisClient.connect(),
-      setPupperCache(),
-    ];
+    const clientStartupTasks: Promise<unknown>[] = [registerCommands()];
 
     await Promise.all(clientStartupTasks);
     client.user!.setActivity('/help', { type: ActivityType.Listening });

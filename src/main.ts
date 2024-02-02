@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import 'reflect-metadata';
 
 import { Events } from 'discord.js';
 import client from './config/discord/client';

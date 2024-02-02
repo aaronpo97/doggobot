@@ -1,7 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { updateGuildById, getGuildById } from '../database/services/DiscordGuildServices';
+import GuildService from '../services/GuildService';
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
+import prisma from '../database/client';
 
 const updateGuild: CommandInterface = {
   data: new SlashCommandBuilder()
@@ -16,7 +17,8 @@ const updateGuild: CommandInterface = {
     .setDefaultMemberPermissions(0),
 
   execute: commandWrapper(async (interaction) => {
-    const guild = await getGuildById(interaction.guildId!);
+    const service = new GuildService(prisma);
+    const guild = await service.getGuildById(interaction.guildId!);
     if (!guild) {
       await interaction.reply("You haven't registered your server yet!");
       return;
@@ -25,7 +27,7 @@ const updateGuild: CommandInterface = {
     const pupperChannel = interaction.options.get('pupper-channel')!.value!.toString();
     const channelId = pupperChannel.replace(/\D/g, '');
 
-    await updateGuildById({ guildId: interaction.guildId!, pupperChannelId: channelId });
+    await service.updateGuildById({ guildId: interaction.guildId!, pupperChannelId: channelId });
     await interaction.reply('Pupper channel updated!');
   }),
 };

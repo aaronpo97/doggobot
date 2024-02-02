@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { deleteGuild, getGuildById } from '../database/services/DiscordGuildServices';
+import GuildService from '../services/GuildService';
+import prisma from '../database/client';
 import commandWrapper from '../util/commandWrapper';
 import CommandInterface from './types/CommandInterface';
 
@@ -10,13 +11,14 @@ const unregisterGuild: CommandInterface = {
     .setDefaultMemberPermissions(0),
 
   execute: commandWrapper(async (interaction) => {
-    const guild = await getGuildById(interaction.guildId!);
+    const service = new GuildService(prisma);
+    const guild = await service.getGuildById(interaction.guildId!);
     if (!guild) {
       await interaction.reply("You haven't registered your server yet!");
       return;
     }
 
-    await deleteGuild(interaction.guildId!);
+    await service.deleteGuild(interaction.guildId!);
     await interaction.reply('Server unregistered!');
   }),
 };
