@@ -7,6 +7,7 @@ import test from '../commands/test';
 import registerGuild from '../commands/registerGuild';
 import unregisterGuild from '../commands/unregisterGuild';
 import updateGuild from '../commands/updateGuild';
+import repo from '../commands/repo';
 
 const interactionCreate = async (interaction: Interaction<CacheType>) => {
   if (!interaction.isCommand()) return;
@@ -34,6 +35,9 @@ const interactionCreate = async (interaction: Interaction<CacheType>) => {
       break;
     case 'test':
       await test.execute(interaction);
+      break;
+    case 'repo':
+      await repo.execute(interaction);
       break;
     default:
       break;

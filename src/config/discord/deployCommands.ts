@@ -11,6 +11,7 @@ import registerGuild from '../../commands/registerGuild';
 import unregisterGuild from '../../commands/unregisterGuild';
 import updateGuild from '../../commands/updateGuild';
 import logger from '../logger';
+import repo from '../../commands/repo';
 
 const { CLIENT_ID, DISCORD_TOKEN } = process.env;
 
@@ -23,6 +24,7 @@ const commands = [
   updateGuild.data,
   help.data,
   test.data,
+  repo.data,
 ].map((command) => command.toJSON!());
 
 const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN!);

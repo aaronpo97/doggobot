@@ -1,7 +1,7 @@
 {
   "name": "rare-puppers",
   "version": "0.0.1",
-  "description": "An app that uses the Discord API to send posts from reddit.com/r/rarepuppers.",
+  "description": "An app that uses the Discord API to send pictures of dogs.",
   "main": "./dist/main.js",
   "scripts": {
     "build": "npx tsc",
@@ -18,12 +18,12 @@
   },
   "dependencies": {
     "@prisma/client": "^5.9.0",
+    "date-fns": "^3.3.1",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.1",
     "node-cron": "^3.0.3",
     "pino": "^8.17.2",
     "pino-pretty": "^10.3.1",
-    "redis": "^4.6.12",
     "zod": "^3.19.1"
   },
   "devDependencies": {
@@ -51,9 +51,9 @@
     "url": "git+https://github.com/aaronpo97/rarepuppers.git"
   },
   "keywords": [],
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/aaronpo97/rarepuppers/issues"
   },
-  "homepage": "https://github.com/aaronpo97/rarepuppers#readme"
+  "homepage": "https://github.com/aaronpo97/rarepuppers#readme",
+  "license": "MIT"
 }
