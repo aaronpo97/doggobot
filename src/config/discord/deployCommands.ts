@@ -28,7 +28,6 @@ const commands = [
 ].map((command) => command.toJSON!());
 
 const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN!);
-
 const registerCommands = async () => {
   try {
     await rest.put(Routes.applicationCommands(CLIENT_ID!), {

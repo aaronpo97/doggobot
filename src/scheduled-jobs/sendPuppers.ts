@@ -10,13 +10,13 @@ const sendPuppers = async (readyClient: Client<true>) => {
 
   guilds.forEach(async (guild) => {
     const { pupperChannelId } = guild;
-    const channel = (await readyClient.channels.fetch(pupperChannelId)) as TextChannel | null;
+    const channel = await readyClient.channels.fetch(pupperChannelId);
 
     if (!channel) {
       return;
     }
 
-    await sendPupperToChannel(channel);
+    await sendPupperToChannel(channel as TextChannel);
   });
 };
 

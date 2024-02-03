@@ -8,8 +8,7 @@ import GithubAPISchema from '../util/zod/GithubAPIResponseSchema';
 const repo: CommandInterface = {
   data: new SlashCommandBuilder()
     .setName('repo')
-    .setDescription('Send the GitHub repository information.')
-    .setDefaultMemberPermissions(0),
+    .setDescription('Send the GitHub repository information.'),
 
   execute: commandWrapper(async (interaction) => {
     const username = 'aaronpo97';
