@@ -1,13 +1,11 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
+import Command from '../util/Command';
 
-const help: CommandInterface = {
-  data: new SlashCommandBuilder()
+const help = new Command(
+  new SlashCommandBuilder()
     .setName('help')
     .setDescription('Replies with a list of commands!'),
-
-  execute: commandWrapper(async (interaction) => {
+  async (interaction) => {
     const embed = new EmbedBuilder()
       .setTitle('Help')
       .setDescription('Here is a list of commands')
@@ -43,7 +41,6 @@ const help: CommandInterface = {
       ]);
 
     await interaction.reply({ embeds: [embed] });
-  }),
-};
-
+  },
+);
 export default help;

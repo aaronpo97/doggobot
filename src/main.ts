@@ -8,16 +8,8 @@ import clientReady from './events/clientReady';
 import interactionCreate from './events/interactionCreate';
 import onError from './events/onError';
 
-const token = process.env.DISCORD_TOKEN;
-
-if (!token) {
-  throw new Error('No token provided');
-}
-
 client.once(Events.ClientReady, clientReady);
 client.on(Events.ChannelDelete, channelDelete);
 client.on(Events.GuildDelete, guildDelete);
 client.on(Events.InteractionCreate, interactionCreate);
 client.on(Events.Error, onError);
-
-client.login(token);

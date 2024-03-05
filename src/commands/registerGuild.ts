@@ -1,11 +1,11 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import GuildService from '../services/GuildService';
-import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
-import prisma from '../database/client';
 
-const registerGuild: CommandInterface = {
-  data: new SlashCommandBuilder()
+import prisma from '../database/client';
+import Command from '../util/Command';
+
+const registerGuild = new Command(
+  new SlashCommandBuilder()
     .setName('registerguild')
     .setDescription('Registers your server.')
     .addChannelOption((option) =>
@@ -15,7 +15,7 @@ const registerGuild: CommandInterface = {
         .setRequired(true),
     )
     .setDefaultMemberPermissions(0),
-  execute: commandWrapper(async (interaction) => {
+  async (interaction) => {
     const service = new GuildService(prisma);
     const guild = await service.getGuildById(interaction.guildId!);
     if (guild) {
@@ -38,7 +38,7 @@ const registerGuild: CommandInterface = {
     ]);
 
     await interaction.reply({ embeds: [embed] });
-  }),
-};
+  },
+);
 
 export default registerGuild;

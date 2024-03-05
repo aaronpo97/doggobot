@@ -3,13 +3,15 @@ import sendPupperToChannel from '../api/sendPostToChannel';
 import GuildService from '../services/GuildService';
 
 import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
+import CommandInterface from './types/ICommand';
 import prisma from '../database/client';
 
 const test: CommandInterface = {
   data: new SlashCommandBuilder()
     .setName('test')
-    .setDescription('Trigger a pupper message to be sent to the registered pupper channel.')
+    .setDescription(
+      'Trigger a pupper message to be sent to the registered pupper channel.',
+    )
     .setDefaultMemberPermissions(0),
 
   execute: commandWrapper(async (interaction) => {

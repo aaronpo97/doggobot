@@ -1,17 +1,14 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-
-import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
 import GuildService from '../services/GuildService';
 import prisma from '../database/client';
+import Command from '../util/Command';
 
-const getInfo: CommandInterface = {
-  data: new SlashCommandBuilder()
+const getInfo = new Command(
+  new SlashCommandBuilder()
     .setName('getinfo')
     .setDescription('Gets the info stored in the database for this server.')
     .setDefaultMemberPermissions(0),
-
-  execute: commandWrapper(async (interaction) => {
+  async (interaction) => {
     const service = new GuildService(prisma);
     const guild = await service.getGuildById(interaction.guildId!);
 
@@ -22,13 +19,12 @@ const getInfo: CommandInterface = {
       return;
     }
 
-    const embed = new EmbedBuilder().setTitle('Guild Info').addFields([
-      { name: 'Guild Name', value: guild.name },
-      { name: 'Pupper Channel', value: `<#${guild.pupperChannelId}>` },
-    ]);
+    const embed = new EmbedBuilder()
+      .setTitle('Guild Info')
+      .addFields([{ name: 'Guild Name', value: guild.name }])
+      .addFields({ name: 'Pupper Channel', value: `<#${guild.pupperChannelId}>` });
 
     await interaction.reply({ embeds: [embed] });
-  }),
-};
-
+  },
+);
 export default getInfo;

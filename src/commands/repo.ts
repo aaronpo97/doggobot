@@ -1,16 +1,16 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 
 import { format } from 'date-fns';
-import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
-import GithubAPISchema from '../util/zod/GithubAPIResponseSchema';
 
-const repo: CommandInterface = {
-  data: new SlashCommandBuilder()
+import GithubAPISchema from '../util/zod/GithubAPIResponseSchema';
+import Command from '../util/Command';
+
+const repo = new Command(
+  new SlashCommandBuilder()
     .setName('repo')
     .setDescription('Send the GitHub repository information.'),
 
-  execute: commandWrapper(async (interaction) => {
+  async (interaction) => {
     const username = 'aaronpo97';
     const repoName = 'rarepuppers';
     const apiUrl = `https://api.github.com/repos/${username}/${repoName}`;
@@ -51,7 +51,7 @@ const repo: CommandInterface = {
       });
 
     await interaction.reply({ embeds: [embed] });
-  }),
-};
+  },
+);
 
 export default repo;

@@ -9,4 +9,11 @@ const client = new Client({
   ],
 });
 
+const token = process.env.DISCORD_TOKEN;
+
+if (!token) {
+  throw new Error('No token provided');
+}
+client.login(token);
+
 export default client;

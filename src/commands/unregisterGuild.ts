@@ -1,16 +1,16 @@
 import { SlashCommandBuilder } from 'discord.js';
 import GuildService from '../services/GuildService';
 import prisma from '../database/client';
-import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
+import Command from '../util/Command';
 
-const unregisterGuild: CommandInterface = {
-  data: new SlashCommandBuilder()
+const unregisterGuild = new Command(
+  new SlashCommandBuilder()
     .setName('unregisterguild')
-    .setDescription('Unregisters your server. This will disable pupper posting in your server.')
+    .setDescription(
+      'Unregisters your server. This will disable pupper posting in your server.',
+    )
     .setDefaultMemberPermissions(0),
-
-  execute: commandWrapper(async (interaction) => {
+  async (interaction) => {
     const service = new GuildService(prisma);
     const guild = await service.getGuildById(interaction.guildId!);
     if (!guild) {
@@ -20,7 +20,7 @@ const unregisterGuild: CommandInterface = {
 
     await service.deleteGuild(interaction.guildId!);
     await interaction.reply('Server unregistered!');
-  }),
-};
+  },
+);
 
 export default unregisterGuild;

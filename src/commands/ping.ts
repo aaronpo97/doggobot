@@ -1,14 +1,15 @@
 import { SlashCommandBuilder } from 'discord.js';
-import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
+import Command from '../util/Command';
 
-const ping: CommandInterface = {
-  data: new SlashCommandBuilder()
+const ping = new Command(
+  new SlashCommandBuilder()
     .setName('ping')
     .setDescription(`Gets the bot's latency in milliseconds.`),
-  execute: commandWrapper(async (interaction) => {
-    await interaction.reply(`Pong! Latency is ${Date.now() - interaction.createdTimestamp}ms.`);
-  }),
-};
+  async (interaction) => {
+    await interaction.reply(
+      `Pong! Latency is ${Date.now() - interaction.createdTimestamp}ms.`,
+    );
+  },
+);
 
 export default ping;

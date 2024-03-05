@@ -47,12 +47,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aaronpo97/rarepuppers.git"
+    "url": "git+https://github.com/aaronpo97/doggobot.git"
   },
   "keywords": [],
   "bugs": {
-    "url": "https://github.com/aaronpo97/rarepuppers/issues"
+    "url": "https://github.com/aaronpo97/doggobot/issues"
   },
-  "homepage": "https://github.com/aaronpo97/rarepuppers#readme",
+  "homepage": "https://github.com/aaronpo97/doggobot#readme",
   "license": "MIT"
 }

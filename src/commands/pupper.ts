@@ -1,11 +1,12 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import getRandomPost from '../scheduled-jobs/getRandomPost';
-import commandWrapper from '../util/commandWrapper';
-import CommandInterface from './types/CommandInterface';
+import Command from '../util/Command';
 
-const pupper: CommandInterface = {
-  data: new SlashCommandBuilder().setName('pupper').setDescription('Replies with a random pupper!'),
-  execute: commandWrapper(async (interaction) => {
+const pupper = new Command(
+  new SlashCommandBuilder()
+    .setName('pupper')
+    .setDescription('Replies with a random pupper from https://dog.ceo/dog-api/'),
+  async (interaction) => {
     const randomPost = await getRandomPost();
 
     if (!randomPost) {
@@ -20,7 +21,7 @@ const pupper: CommandInterface = {
       .setFooter({ text: 'From https://dog.ceo/dog-api/' });
 
     await interaction.reply({ embeds: [embed] });
-  }),
-};
+  },
+);
 
 export default pupper;
